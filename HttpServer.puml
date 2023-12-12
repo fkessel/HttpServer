@@ -1,0 +1,63 @@
+@startuml HttpMessage
+hide empty members
+' left to right direction
+
+skinparam groupInheritance 2
+' skinparam classAttributeIconSize 0
+
+abstract class Message {
+    -allHeader: map <HeaderFieldName, string>
+    -Version
+    #body: string
+    +string getBody()
+    +string getHeader()
+    +string getHeaderCount()
+    +string getVersion()
+    +void setversion()
+    #void parseHeaderNameNameAndValue()
+    -{abstract} bool isValidStartLine()
+}
+
+Class Request {
+    -RequestLine
+    -void parseFirstLine()
+    -void parseRequest()
+}
+Class Response {
+    -ResponseLine
+}
+
+class Version {
+    -version: string
+}
+
+class RequestLine {
+    -Method
+    -Target: string
+    +Method getMethod()
+    +string getTarget()
+    +void setMethod()
+    +void setTarget()
+}
+
+enum Method {}
+class ResponseLine {}
+
+Class HeaderFieldName {
+    -fieldName: string
+    -bool operator<()
+}
+
+' Request and Response inherit from Message
+Message <|-- Request
+Response --|> Message
+Version --* Message
+
+' Message creates HeaderFieldNames
+Message ..> HeaderFieldName
+
+RequestLine --* Request
+ResponseLine --* Response
+Method --* RequestLine
+
+@enduml
